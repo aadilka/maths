@@ -1,7 +1,3 @@
-const apiUrl = 'https://saurav.tech/NewsAPI/top-headlines/category/general/in.json'; // Free API URL
-const sportsApiUrl = 'https://saurav.tech/NewsAPI/top-headlines/category/sports/in.json'; // Free API URL for sports news
-const newsContainer = document.getElementById('news-container');
-
 const quotes = [
     "The future belongs to those who believe in the beauty of their dreams.",
     "Success is the sum of small efforts, repeated day in and day out.",
@@ -19,64 +15,6 @@ function setRandomQuote() {
     const quote = quotes[Math.floor(Math.random() * quotes.length)];
     const quoteDiv = document.querySelector('.motivational-quote');
     if (quoteDiv) quoteDiv.textContent = quote;
-}
-
-async function fetchNews() {
-    try {
-        const response = await fetch(apiUrl);
-        console.log('API Response Status:', response.status); // Log response status
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log('API Response Data:', data); // Log response data
-
-        if (data.articles) {
-            const indianNews = data.articles.filter(article => article.source.name.toLowerCase().includes('india'));
-            displayNews(indianNews);
-        } else {
-            newsContainer.innerHTML = '<p>No news available at the moment.</p>';
-        }
-    } catch (error) {
-        console.error('Error fetching news:', error); // Log detailed error
-        newsContainer.innerHTML = '<p>Failed to load news. Please try again later.</p>';
-    }
-}
-
-async function fetchSportsNews() {
-    try {
-        const response = await fetch(sportsApiUrl);
-        console.log('Sports API Response Status:', response.status); // Log response status
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log('Sports API Response Data:', data); // Log response data
-
-        if (data.articles) {
-            displayNews(data.articles);
-        } else {
-            newsContainer.innerHTML += '<p>No sports news available at the moment.</p>';
-        }
-    } catch (error) {
-        console.error('Error fetching sports news:', error); // Log detailed error
-        newsContainer.innerHTML += '<p>Failed to load sports news. Please try again later.</p>';
-    }
-}
-
-function displayNews(articles) {
-    newsContainer.innerHTML = '';
-    articles.forEach(article => {
-        const newsItem = document.createElement('div');
-        newsItem.className = 'news-item';
-        newsItem.innerHTML = `
-            <img src="${article.urlToImage || 'placeholder.jpg'}" alt="News Image" class="news-image">
-            <h2>${article.title}</h2>
-            <p>${article.description || 'No description available.'}</p>
-            <a href="${article.url}" target="_blank">Read more</a>
-        `;
-        newsContainer.appendChild(newsItem);
-    });
 }
 
 const topics = [
@@ -406,7 +344,3 @@ function displayTopics() {
         });
     });
 }
-
-// Fetch both general and sports news on page load
-fetchNews();
-fetchSportsNews();
